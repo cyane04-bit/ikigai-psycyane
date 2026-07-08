@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Ikigai · PsyCyaNe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   VARIABLES — Charte PsyCyaNe
+   ============================================================ */
+:root {
+  --navy:        #0F2540;
+  --blue:        #2A4D6D;
+  --pale-yellow: #FEF3C7;
+  --ink:         #3A3A3A;
+  --cream:       #F5F5F0;
+  --logo-yellow: #FFD100;
+  --slate:       #1B3A5C;
+  --slate-line:  #3E5C7E;
+  --border:      #E2E0DA;
+  --white:       #FFFFFF;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+/* ============================================================
+   LOGO SVG PsyCyaNe
+   ============================================================ */
+.cyane-logo { display: inline-block; }
+.cyane-logo svg, .cyane-logo img { width: 110px; height: auto; }
+
+/* Version petite dans la sidebar */
+.cyane-logo-sm svg, .cyane-logo-sm img { width: 48px; }
+
+/* ============================================================
+   ÉCRAN DE SETUP
+   ============================================================ */
+#setupScreen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Décoration fond (cercles discrets) */
+#setupScreen::before {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: var(--slate);
+  top: -150px; right: -150px;
+  opacity: 0.5;
+}
+#setupScreen::after {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: var(--logo-yellow);
+  bottom: -80px; left: -60px;
+  opacity: 0.12;
+}
+
+.setup-card {
+  background: var(--cream);
+  border-radius: 20px;
+  padding: 2.75rem 2.5rem;
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+}
+
+.setup-logo-wrap { margin-bottom: 1.5rem; }
+
+.setup-tagline {
+  font-size: 0.78rem;
+  color: var(--slate-line);
+  margin-top: -0.5rem;
+  margin-bottom: 1.75rem;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.setup-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--navy);
+  margin-bottom: 0.55rem;
+}
+.setup-card .intro {
+  font-size: 0.87rem;
+  color: var(--ink);
+  line-height: 1.65;
+  margin-bottom: 1.75rem;
+}
+
+.form-group { text-align: left; margin-bottom: 1rem; }
+.form-group label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 0.35rem;
+}
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--ink);
+  background: white;
+  transition: border-color 0.2s;
+}
+.form-group input:focus, .form-group select:focus {
+  outline: none; border-color: var(--blue);
+}
+
+.btn-primary {
+  width: 100%; margin-top: 0.5rem;
+  padding: 0.85rem;
+  background: var(--navy); color: var(--logo-yellow);
+  border: none; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; letter-spacing: 0.5px;
+  transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--slate); }
+
+.setup-footer {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--slate-line);
+  line-height: 1.55;
+}
+
+/* ============================================================
+   LAYOUT PRINCIPAL
+   ============================================================ */
+#mainApp { display: none; height: 100vh; overflow: hidden; }
+#mainApp.visible { display: flex; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 258px; min-width: 258px;
+  background: var(--navy);
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+}
+.sidebar-header {
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--slate);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.sidebar-brand-text {
+  flex: 1;
+}
+.sidebar-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  color: var(--cream);
+  line-height: 1.2;
+}
+.sidebar-sub {
+  font-size: 0.72rem;
+  color: var(--slate-line);
+  margin-top: 2px;
+}
+
+.sidebar-steps { flex: 1; padding: 0.6rem 0; }
+
+.step-nav {
+  display: flex; align-items: flex-start;
+  gap: 10px; padding: 0.75rem 1.2rem;
+  cursor: pointer; transition: background 0.15s;
+}
+.step-nav:hover:not(.locked) { background: var(--slate); }
+.step-nav.active { background: var(--slate); }
+.step-nav.locked { opacity: 0.38; cursor: not-allowed; }
+
+.step-num {
+  width: 26px; height: 26px; min-width: 26px;
+  border-radius: 50%; border: 2px solid var(--slate-line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; font-weight: 700;
+  margin-top: 3px; color: var(--cream);
+  transition: all 0.2s;
+}
+.step-nav.active .step-num,
+.step-nav.done   .step-num {
+  background: var(--logo-yellow); border-color: var(--logo-yellow); color: var(--navy);
+}
+
+.step-info { flex: 1; min-width: 0; }
+.step-title-nav { font-size: 0.81rem; font-weight: 600; color: var(--cream); line-height: 1.3; }
+.step-sub-nav   { font-size: 0.71rem; color: var(--slate-line); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.sidebar-footer {
+  padding: 1rem 1.2rem;
+  border-top: 1px solid var(--slate);
+  display: flex; flex-direction: column; gap: 0.45rem;
+}
+.btn-sb {
+  width: 100%; padding: 0.5rem 0.75rem;
+  border-radius: 6px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.77rem; font-weight: 500; cursor: pointer;
+  transition: all 0.2s; text-align: left;
+}
+.btn-sb.export {
+  background: transparent; border: 1px solid var(--slate-line); color: var(--pale-yellow);
+}
+.btn-sb.export:hover { border-color: var(--logo-yellow); color: var(--logo-yellow); background: var(--slate); }
+.btn-sb.settings { background: transparent; border: none; color: var(--slate-line); }
+.btn-sb.settings:hover { color: var(--cream); }
+
+/* CONTENU */
+.main-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ============================================================
+   ÉCRAN WELCOME
+   ============================================================ */
+#welcomeScreen {
+  flex: 1; overflow-y: auto;
+  padding: 2.5rem 2rem;
+  display: flex; align-items: center; justify-content: center;
+}
+.welcome-inner { max-width: 640px; width: 100%; }
+
+.welcome-hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.welcome-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.1rem; color: var(--navy); margin-bottom: 0.25rem;
+}
+.welcome-hero .sub {
+  font-size: 0.93rem; color: var(--slate-line);
+}
+
+.welcome-desc {
+  font-size: 0.9rem; color: var(--ink); line-height: 1.72;
+  background: white; border-radius: 12px;
+  padding: 1.2rem 1.5rem; border-left: 4px solid var(--logo-yellow);
+  margin-bottom: 1.75rem;
+}
+.welcome-desc strong { color: var(--navy); }
+
+.steps-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.85rem; margin-bottom: 2rem;
+}
+.step-card {
+  background: white; border-radius: 10px;
+  padding: 1rem 1.1rem; border-top: 3px solid var(--logo-yellow);
+}
+.step-card.full { grid-column: 1 / -1; }
+.step-card-n { font-size: 0.68rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 0.2rem; }
+.step-card-t { font-family: 'Playfair Display', serif; font-size: 0.93rem; color: var(--navy); margin-bottom: 0.2rem; }
+.step-card-d { font-size: 0.77rem; color: var(--slate-line); line-height: 1.45; }
+
+.btn-start {
+  display: block; width: fit-content; margin: 0 auto;
+  padding: 0.9rem 2.5rem;
+  background: var(--navy); color: var(--logo-yellow);
+  border: none; border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.93rem; font-weight: 600;
+  cursor: pointer; letter-spacing: 0.5px; transition: background 0.2s;
+}
+.btn-start:hover { background: var(--slate); }
+
+/* ============================================================
+   CHAT
+   ============================================================ */
+#chatScreen { flex: 1; display: none; flex-direction: column; overflow: hidden; }
+#chatScreen.visible { display: flex; }
+
+.chat-header {
+  padding: 0.85rem 1.5rem; background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.7rem;
+}
+.chat-badge {
+  display: inline-block; background: var(--pale-yellow); color: var(--navy);
+  font-size: 0.67rem; font-weight: 700; padding: 2px 9px; border-radius: 20px;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.2rem;
+}
+.chat-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--navy); }
+
+.chat-actions { display: flex; gap: 0.45rem; flex-wrap: wrap; }
+.btn-act {
+  padding: 0.43rem 0.85rem; border-radius: 6px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.77rem; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+  border: 1px solid var(--border); background: white; color: var(--ink);
+}
+.btn-act:hover { background: var(--cream); }
+.btn-act.primary { background: var(--navy); color: var(--logo-yellow); border-color: var(--navy); }
+.btn-act.primary:hover { background: var(--slate); }
+
+/* MESSAGES */
+.msgs { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+.msg { display: flex; gap: 0.65rem; max-width: 82%; animation: fadeUp 0.25s ease; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.msg.ai   { align-self: flex-start; }
+
+.av {
+  width: 30px; height: 30px; min-width: 30px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; font-weight: 700; margin-top: 3px;
+}
+.msg.ai   .av { background: var(--logo-yellow); color: var(--navy); }
+.msg.user .av { background: var(--blue); color: white; }
+
+.bubble {
+  padding: 0.78rem 1rem; border-radius: 12px;
+  font-size: 0.87rem; line-height: 1.65; white-space: pre-wrap;
+}
+.msg.ai   .bubble { background: white; color: var(--ink); border: 1px solid var(--border); border-radius: 2px 12px 12px 12px; }
+.msg.user .bubble { background: var(--navy); color: var(--cream); border-radius: 12px 2px 12px 12px; }
+
+/* Typing */
+.typing { display: flex; gap: 0.65rem; align-items: center; align-self: flex-start; animation: fadeUp 0.25s ease; }
+.typing-bub { background: white; border: 1px solid var(--border); border-radius: 2px 12px 12px 12px; padding: 0.7rem 1rem; display: flex; gap: 4px; align-items: center; }
+.dot { width: 7px; height: 7px; background: var(--slate-line); border-radius: 50%; animation: bounce 1.2s infinite; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,60%,100% { transform:translateY(0); opacity:.4; } 30% { transform:translateY(-5px); opacity:1; } }
+
+/* Input */
+.chat-foot { padding: 0.85rem 1.5rem; background: white; border-top: 1px solid var(--border); }
+.input-row { display: flex; gap: 0.6rem; align-items: flex-end; }
+.chat-ta {
+  flex: 1; padding: 0.68rem 0.9rem;
+  border: 2px solid var(--border); border-radius: 8px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.87rem; color: var(--ink);
+  resize: none; min-height: 42px; max-height: 108px; line-height: 1.5;
+  transition: border-color 0.2s;
+}
+.chat-ta:focus { outline: none; border-color: var(--blue); }
+.chat-ta:disabled { opacity: 0.55; }
+.btn-send {
+  width: 42px; height: 42px; background: var(--navy); color: var(--logo-yellow);
+  border: none; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background 0.2s;
+}
+.btn-send:hover { background: var(--slate); }
+.btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
+.input-hint { font-size: 0.71rem; color: var(--slate-line); margin-top: 0.38rem; }
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-bg { position: fixed; inset: 0; background: rgba(15,37,64,.65); display: none; align-items: center; justify-content: center; z-index: 999; }
+.modal-bg.open { display: flex; }
+.modal-box { background: var(--cream); border-radius: 14px; padding: 2rem; max-width: 400px; width: 90%; text-align: center; }
+.modal-box h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--navy); margin-bottom: 0.6rem; }
+.modal-box p  { font-size: 0.86rem; color: var(--ink); line-height: 1.6; margin-bottom: 1.35rem; }
+.modal-btns { display: flex; gap: 0.6rem; justify-content: center; }
+.btn-m { padding: 0.58rem 1.35rem; border-radius: 6px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+.btn-m.cancel { background: white; color: var(--ink); border: 1px solid var(--border); }
+.btn-m.cancel:hover { background: var(--cream); }
+.btn-m.ok     { background: var(--navy); color: var(--logo-yellow); border: 1px solid var(--navy); }
+.btn-m.ok:hover { background: var(--slate); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 680px) {
+  .sidebar { width: 54px; min-width: 54px; }
+  .step-info, .sidebar-sub, .sidebar-brand-text { display: none; }
+  .sidebar-header { justify-content: center; padding: 1rem 0.5rem; }
+  .btn-sb { font-size: 0; padding: 0.5rem; text-align: center; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .msg { max-width: 94%; }
+  .welcome-hero h1 { font-size: 1.65rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     CONFIGURATION — À remplir après avoir déployé le Worker
+     ================================================================ -->
+<script>
+  // ↓ Remplacez par l'URL de votre Cloudflare Worker
+  const PROXY_URL = 'https://curly-fire-e9e5.cyane04.workers.dev';
+</script>
+
+<!-- ================================================================
+     LOGO PSYCYANE (SVG inline — approximation fidèle)
+     Pour utiliser votre PNG : remplacez la balise <svg> par
+     <img src="logo.png" alt="PsyCyaNe" style="width:110px">
+     et ajoutez logo.png à la racine de votre repo GitHub.
+     ================================================================ -->
+<template id="logoTpl">
+  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAtwAAAHvCAYAAABnrwj3AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAALiMAAC4jAXilP3YAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAACq2lUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSfvu78nIGlkPSdXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQnPz4NCjx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iPjxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+PHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9InV1aWQ6ZmFmNWJkZDUtYmEzZC0xMWRhLWFkMzEtZDMzZDc1MTgyZjFiIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iPjx4bXA6Q3JlYXRvclRvb2w+TWljcm9zb2Z0IFdpbmRvd3MgUGhvdG8gVmlld2VyIDEwLjAuMjYxMDAuMTg4MjwveG1wOkNyZWF0b3JUb29sPjx4bXA6Y3JlYXRvcnRvb2w+TWljcm9zb2Z0IFdpbmRvd3MgUGhvdG8gVmlld2VyIDEwLjAuMjYxMDAuMTg4MjwveG1wOmNyZWF0b3J0b29sPjwvcmRmOkRlc2NyaXB0aW9uPjxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSJ1dWlkOmZhZjViZGQ1LWJhM2QtMTFkYS1hZDMxLWQzM2Q3NTE4MmYxYiIgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPjx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+PC9yZGY6RGVzY3JpcHRpb24+PC9yZGY6UkRGPjwveDp4bXBtZXRhPg0KPD94cGFja2V0IGVuZD0ndyc/PndUsbQAAFBjSURBVHhe7d1PctvWFu/7xTsB+7Tu7dyy0uYtWRlBlO6rekVlBJYnwCgjiDyCyGy9nqURRBiBpRFEUj22I43gmCPgbWQxprdBEsDea2Nt4Pup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" alt="PsyCyaNe" style="width:110px;height:auto">
+</template>
+
+<!-- ================================================================
+     ÉCRAN SETUP
+     ================================================================ -->
+<div id="setupScreen">
+  <div class="setup-card">
+
+    <div class="setup-logo-wrap cyane-logo" id="setupLogo"></div>
+    <div class="setup-tagline">Psychologie du Travail · Formation</div>
+
+    <h2>Votre Coach Ikigai Personnel</h2>
+    <p class="intro">
+      Découvrez votre ikigai en 5 étapes de coaching guidé par l'IA.
+      Explorez vos passions, compétences, valeurs et construisez votre feuille de route.
+    </p>
+
+    <div class="form-group">
+      <label for="prenomInput">Votre prénom <span style="font-weight:400;color:var(--slate-line)">(optionnel — pour un coaching personnalisé)</span></label>
+      <input type="text" id="prenomInput" placeholder="Ex : Marie, Thomas…">
+    </div>
+
+    <div class="form-group">
+      <label for="modelSelect">Modèle IA</label>
+      <select id="modelSelect">
+        <option value="claude-sonnet-4-6">Claude Sonnet — Recommandé (rapide &amp; approfondi)</option>
+        <option value="claude-opus-4-8">Claude Opus — Très approfondi (plus lent)</option>
+        <option value="claude-haiku-4-5-20251001">Claude Haiku — Rapide et économique</option>
+      </select>
+    </div>
+
+    <button class="btn-primary" onclick="startApp()">Commencer mon parcours →</button>
+
+    <div class="setup-footer">
+      Coaching animé par l'IA Claude (Anthropic) · Vos réponses restent dans votre navigateur
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     APPLICATION PRINCIPALE
+     ================================================================ -->
+<div id="mainApp">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="cyane-logo cyane-logo-sm" id="sidebarLogo"></div>
+      <div class="sidebar-brand-text">
+        <div class="sidebar-title">PsyCyaNe</div>
+        <div class="sidebar-sub">Coach Ikigai</div>
+      </div>
+    </div>
+    <nav class="sidebar-steps" id="sidebarSteps"></nav>
+    <div class="sidebar-footer">
+      <button class="btn-sb export" onclick="exportParcours()">📄 Exporter mon parcours</button>
+      <button class="btn-sb settings" onclick="gotoSettings()">⚙ Paramètres</button>
+    </div>
+  </aside>
+
+  <!-- CONTENU PRINCIPAL -->
+  <main class="main-content">
+
+    <!-- WELCOME -->
+    <div id="welcomeScreen">
+      <div class="welcome-inner">
+        <div class="welcome-hero">
+          <h1>Votre voyage vers l'Ikigai</h1>
+          <p class="sub">Un parcours de coaching personnalisé en 5 étapes</p>
+        </div>
+        <div class="welcome-desc">
+          L'<strong>ikigai</strong> est un concept japonais désignant ce qui donne sens à votre existence —
+          la convergence entre ce que vous aimez, ce pour quoi vous êtes doué·e, ce dont le monde a besoin,
+          et ce pour quoi vous pouvez être rémunéré·e.<br><br>
+          Ce coaching guidé vous accompagne pas à pas pour explorer chacune de ces dimensions
+          et construire une vision claire, réaliste et actionnnable de votre ikigai.
+        </div>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-card-n">Étape 1</div>
+            <div class="step-card-t">Diagnostic</div>
+            <div class="step-card-d">Explorer passions, compétences, valeurs et contraintes</div>
+          </div>
+          <div class="step-card">
+            <div class="step-card-n">Étape 2</div>
+            <div class="step-card-t">Scénarios</div>
+            <div class="step-card-d">3 à 5 pistes d'ikigai personnalisées</div>
+          </div>
+          <div class="step-card">
+            <div class="step-card-n">Étape 3</div>
+            <div class="step-card-t">Comparaison</div>
+            <div class="step-card-d">Matrice pour choisir le scénario le plus aligné</div>
+          </div>
+          <div class="step-card">
+            <div class="step-card-n">Étape 4</div>
+            <div class="step-card-t">Feuille de route</div>
+            <div class="step-card-d">Plan d'action à 30 jours, 90 jours et 1 an</div>
+          </div>
+          <div class="step-card full">
+            <div class="step-card-n">Étape 5</div>
+            <div class="step-card-t">Évolution</div>
+            <div class="step-card-d">Faire vivre et grandir son ikigai dans la durée</div>
+          </div>
+        </div>
+        <button class="btn-start" onclick="goToStep(1)">Commencer l'exploration →</button>
+      </div>
+    </div>
+
+    <!-- CHAT -->
+    <div id="chatScreen">
+      <div class="chat-header">
+        <div>
+          <div class="chat-badge" id="chatBadge">Étape 1 sur 5</div>
+          <div class="chat-title" id="chatTitle">Diagnostic approfondi</div>
+        </div>
+        <div class="chat-actions">
+          <button class="btn-act" onclick="restartStep()">↺ Recommencer l'étape</button>
+          <button class="btn-act primary" id="btnNext" onclick="nextStep()">Étape suivante →</button>
+        </div>
+      </div>
+
+      <div class="msgs" id="msgsBox"></div>
+
+      <div class="chat-foot">
+        <div class="input-row">
+          <textarea class="chat-ta" id="chatInput"
+            placeholder="Votre réponse…" rows="1"
+            onkeydown="onKey(event)" oninput="grow(this)"></textarea>
+          <button class="btn-send" id="btnSend" onclick="sendMsg()" title="Envoyer">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="input-hint">Entrée pour envoyer · Maj+Entrée pour un saut de ligne</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal-box">
+    <h3 id="mTitle">Confirmer</h3>
+    <p  id="mText">Êtes-vous sûr·e ?</p>
+    <div class="modal-btns">
+      <button class="btn-m cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-m ok" id="mOk">Confirmer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     JAVASCRIPT
+     ================================================================ -->
+<script>
+// ──────────────────────────────────────────────────────────────────
+// INJECTION DU LOGO
+// ──────────────────────────────────────────────────────────────────
+function injectLogo(id) {
+  const tpl = document.getElementById('logoTpl')
+  const el  = document.getElementById(id)
+  if (tpl && el) el.appendChild(tpl.content.cloneNode(true))
+}
+injectLogo('setupLogo')
+injectLogo('sidebarLogo')
+
+// ──────────────────────────────────────────────────────────────────
+// CONFIGURATION DES ÉTAPES
+// ──────────────────────────────────────────────────────────────────
+const STEPS = [
+  {
+    id: 1, title: 'Diagnostic approfondi', sub: 'Passions, compétences, valeurs',
+    sys: `Tu es à l'ÉTAPE 1 — DIAGNOSTIC APPROFONDI.
+
+Ton rôle est d'explorer, UNE DIMENSION À LA FOIS, les 10 axes suivants :
+1. Ce que l'utilisateur aime faire et ce qui lui procure un état de flow (absorption totale, énergie, plaisir)
+2. Ses compétences techniques et ses talents naturels
+3. Les activités pour lesquelles les autres le/la sollicitent spontanément
+4. Ses valeurs fondamentales (ce qui est non-négociable)
+5. Ses motivations profondes (pourquoi il/elle se lève le matin)
+6. Ses expériences marquantes (positives ou difficiles, qui l'ont façonné·e)
+7. Son environnement de travail idéal (rythme, contexte, équipe, autonomie…)
+8. Ses contraintes personnelles ou professionnelles (temps, famille, finances, santé…)
+9. Ce dont le monde a besoin selon lui/elle (problèmes qu'il/elle voudrait contribuer à résoudre)
+10. Ce pour quoi il/elle pourrait être rémunéré·e aujourd'hui ou demain
+
+Commence par accueillir chaleureusement l'utilisateur et lui poser UNE première question ouverte sur ce qui l'a amené·e à cette démarche. Puis explore les 10 dimensions une à une, en reformulant et approfondissant.
+
+Identifie les contradictions éventuelles.
+
+Quand toutes les dimensions ont été explorées, rédige une SYNTHÈSE STRUCTURÉE (forces, motivations, valeurs, leviers, zones à clarifier) et demande si elle est fidèle.`
+  },
+  {
+    id: 2, title: 'Scénarios d\'ikigai', sub: '3 à 5 pistes personnalisées',
+    sys: `Tu es à l'ÉTAPE 2 — ÉLABORATION DE SCÉNARIOS D'IKIGAI.
+
+Tu disposes du diagnostic complet (visible dans l'historique). Rappelle brièvement les éléments clés du profil, puis propose 3 à 5 scénarios distincts d'ikigai, UN PAR UN.
+
+Pour chaque scénario :
+— Pourquoi il correspond au profil
+— Points forts
+— Limites et risques
+— Faisabilité (court / moyen / long terme)
+— Potentiel d'épanouissement personnel
+— Potentiel économique
+— Exemple concret d'application
+
+Après chaque scénario, recueille les impressions avant de proposer le suivant. Ajuste en fonction des réactions.`
+  },
+  {
+    id: 3, title: 'Comparaison et choix', sub: 'Matrice comparative',
+    sys: `Tu es à l'ÉTAPE 3 — COMPARAISON ET CHOIX.
+
+Construis une matrice comparative. Évalue chaque scénario sur 8 critères (note /10) :
+1. Enthousiasme personnel
+2. Cohérence avec les valeurs
+3. Adéquation avec les compétences actuelles
+4. Impact potentiel
+5. Faisabilité réaliste
+6. Potentiel professionnel/économique
+7. Équilibre vie personnelle / professionnelle
+8. Risques et incertitudes (inversée : 10 = peu risqué)
+
+Présente la matrice avec justification pour chaque note. Demande validation ou ajustement.
+Recommande le scénario le plus pertinent en expliquant pourquoi.`
+  },
+  {
+    id: 4, title: 'Feuille de route', sub: 'Plan d\'action 30j · 90j · 1 an',
+    sys: `Tu es à l'ÉTAPE 4 — FEUILLE DE ROUTE.
+
+Sur la base du scénario retenu, construis section par section (feedback après chaque section) :
+1. Premières expérimentations à faible risque
+2. Compétences à développer et comment
+3. Ressources utiles (livres, podcasts, communautés)
+4. Personnes et réseaux à rencontrer
+5. Objectifs à 30 jours (actions concrètes immédiates)
+6. Objectifs à 90 jours (premiers jalons visibles)
+7. Objectifs à 1 an (horizon de transformation)
+8. Obstacles anticipés et stratégies pour les dépasser
+9. Indicateurs de progression (qualitatifs et quantitatifs)
+
+Reste ancré·e dans le réel. Challenge bienveillamment les objectifs trop ambitieux ou trop prudents.`
+  },
+  {
+    id: 5, title: 'Évolution', sub: 'Faire vivre son ikigai',
+    sys: `Tu es à l'ÉTAPE 5 — ÉVOLUTION ET PÉRENNITÉ DE L'IKIGAI.
+
+Aborde progressivement :
+1. Comment faire évoluer cet ikigai dans le temps (il n'est pas figé)
+2. Les signaux de désalignement à surveiller
+3. Comment réévaluer régulièrement ses priorités (rituels, fréquence, méthode)
+4. Intégrer les grands changements de vie
+5. Construire une démarche d'amélioration continue
+
+Termine par :
+• Une analyse critique bienveillante des limites de tes recommandations
+• Les hypothèses qui restent à vérifier dans la réalité
+• Un message d'encouragement final, chaleureux et ancré dans ce que tu as appris de la personne.`
+  }
+]
+
+const BASE_SYS = `Tu es un coach professionnel spécialisé dans l'accompagnement de projets de vie et la démarche d'ikigai, pour PsyCyaNe (cabinet de psychologie du travail et de formation professionnelle).
+
+POSTURE DE COACHING :
+• Écoute active et reformulation
+• Questionnement ouvert, bienveillant, approfondi
+• Identification des contradictions et zones d'incertitude
+• Challenge bienveillant des hypothèses
+• Chaleur, encouragement sincère, professionnalisme constant
+
+RÈGLES ABSOLUES :
+• Une seule question à la fois — tu attends la réponse avant de continuer
+• Dans les échanges courants : réponses concises (4–7 lignes), pas de listes à puces
+• Les listes sont réservées aux synthèses, matrices et plans d'action
+• Respect et chaleur constants`
+
+// ──────────────────────────────────────────────────────────────────
+// ÉTAT
+// ──────────────────────────────────────────────────────────────────
+const S = { model:'claude-sonnet-4-6', prenom:'', step:0, done:[], msgs:{}, loading:false }
+
+function save() {
+  localStorage.setItem('psy_iki', JSON.stringify({ model:S.model, prenom:S.prenom, step:S.step, done:S.done, msgs:S.msgs }))
+}
+function restore() {
+  const r = localStorage.getItem('psy_iki')
+  if (r) Object.assign(S, JSON.parse(r))
+}
+
+// ──────────────────────────────────────────────────────────────────
+// INIT & SETUP
+// ──────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', restore)
+
+function startApp() {
+  S.model  = document.getElementById('modelSelect').value
+  S.prenom = document.getElementById('prenomInput').value.trim()
+  save()
+  document.getElementById('setupScreen').style.display = 'none'
+  document.getElementById('mainApp').style.display = 'flex'
+  document.getElementById('mainApp').classList.add('visible')
+  renderSidebar()
+  if (S.step > 0) goToStep(S.step); else showWelcome()
+}
+
+function gotoSettings() {
+  document.getElementById('mainApp').style.display = 'none'
+  document.getElementById('mainApp').classList.remove('visible')
+  document.getElementById('setupScreen').style.display = 'flex'
+  document.getElementById('modelSelect').value = S.model
+  document.getElementById('prenomInput').value = S.prenom
+}
+
+// ──────────────────────────────────────────────────────────────────
+// NAVIGATION
+// ──────────────────────────────────────────────────────────────────
+function showWelcome() {
+  document.getElementById('welcomeScreen').style.display = 'flex'
+  document.getElementById('chatScreen').style.display    = 'none'
+  S.step = 0; save(); hl(0)
+}
+
+function goToStep(n) {
+  if (n > 1 && !S.msgs[n-1]) {
+    modal('Étape précédente requise', `Commencez d'abord l'étape ${n-1} avant d'accéder à l'étape ${n}.`, null)
+    return
+  }
+  S.step = n; save()
+  const s = STEPS[n-1]
+  document.getElementById('welcomeScreen').style.display = 'none'
+  document.getElementById('chatScreen').style.display    = 'flex'
+  document.getElementById('chatBadge').textContent = `Étape ${n} sur 5`
+  document.getElementById('chatTitle').textContent = s.title
+  document.getElementById('btnNext').textContent   = n < 5 ? 'Étape suivante →' : '✓ Finaliser le parcours'
+  renderMsgs(n); hl(n)
+  if (!S.msgs[n] || S.msgs[n].length === 0) { S.msgs[n] = []; aiIntro(n) }
+}
+
+function hl(active) {
+  document.querySelectorAll('.step-nav').forEach(el =>
+    el.classList.toggle('active', parseInt(el.dataset.step) === active))
+}
+
+// ──────────────────────────────────────────────────────────────────
+// SIDEBAR
+// ──────────────────────────────────────────────────────────────────
+function renderSidebar() {
+  document.getElementById('sidebarSteps').innerHTML = STEPS.map(s => {
+    const isDone   = S.done.includes(s.id)
+    const isLocked = s.id > 1 && !S.msgs[s.id-1] && !S.msgs[s.id]
+    const cls = ['step-nav', isDone?'done':'', isLocked?'locked':'', S.step===s.id?'active':''].filter(Boolean).join(' ')
+    return `<div class="${cls}" data-step="${s.id}" onclick="canGo(${s.id}) && goToStep(${s.id})">
+      <div class="step-num">${isDone ? '✓' : s.id}</div>
+      <div class="step-info">
+        <div class="step-title-nav">${s.title}</div>
+        <div class="step-sub-nav">${s.sub}</div>
+      </div>
+    </div>`
+  }).join('')
+}
+
+function canGo(n) {
+  if (n===1) return true
+  if (S.done.includes(n-1)) return true
+  if (S.msgs[n] && S.msgs[n].length) return true
+  if (S.msgs[n-1] && S.msgs[n-1].length) return true
+  return false
+}
+
+// ──────────────────────────────────────────────────────────────────
+// MESSAGES — RENDU
+// ──────────────────────────────────────────────────────────────────
+function renderMsgs(n) {
+  document.getElementById('msgsBox').innerHTML = (S.msgs[n]||[]).map(msgHTML).join('')
+  scrollDown()
+}
+function msgHTML(m) {
+  const isAI = m.role === 'assistant'
+  const av   = isAI ? '✦' : (S.prenom ? S.prenom[0].toUpperCase() : 'M')
+  return `<div class="msg ${isAI?'ai':'user'}">
+    <div class="av">${av}</div>
+    <div class="bubble">${esc(m.content)}</div>
+  </div>`
+}
+function addMsg(role, content) {
+  const b   = document.getElementById('msgsBox')
+  const div = document.createElement('div')
+  div.innerHTML = msgHTML({role, content})
+  b.appendChild(div.firstElementChild)
+  scrollDown()
+}
+function showTyping() {
+  const b = document.getElementById('msgsBox')
+  const d = document.createElement('div')
+  d.id = 'typing'; d.className = 'typing'
+  d.innerHTML = `<div class="av" style="background:var(--logo-yellow);color:var(--navy)">✦</div>
+    <div class="typing-bub"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`
+  b.appendChild(d); scrollDown()
+}
+function hideTyping() { const d = document.getElementById('typing'); if(d) d.remove() }
+function scrollDown() { const b = document.getElementById('msgsBox'); setTimeout(() => b.scrollTop = b.scrollHeight, 40) }
+function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
+
+// ──────────────────────────────────────────────────────────────────
+// APPEL API — VIA CLOUDFLARE WORKER (clé cachée côté serveur)
+// ──────────────────────────────────────────────────────────────────
+async function callAI(messages, sys) {
+  const res = await fetch(PROXY_URL, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ model: S.model, max_tokens: 1800, system: sys, messages })
+  })
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}))
+    throw new Error(e.error?.message || `Erreur HTTP ${res.status}`)
+  }
+  const d = await res.json()
+  return d.content[0].text
+}
+
+function buildSys(n) {
+  let sys = BASE_SYS
+  if (S.prenom) sys += `\n\nL'utilisateur s'appelle ${S.prenom}. Utilise son prénom naturellement.`
+  sys += `\n\n────────────────────\n${STEPS[n-1].sys}`
+  return sys
+}
+
+function buildCtx(n) {
+  if (n <= 1) return []
+  const parts = []
+  for (let i = 1; i < n; i++) {
+    const m = S.msgs[i]; if (!m || !m.length) continue
+    parts.push(`[ÉTAPE ${i} — ${STEPS[i-1].title}]\n` +
+      m.slice(-8).map(x => `${x.role==='assistant'?'Coach':'Utilisateur'}: ${x.content}`).join('\n\n'))
+  }
+  if (!parts.length) return []
+  return [
+    { role:'user',      content:`Résumé de nos étapes précédentes :\n\n${parts.join('\n\n───\n\n')}` },
+    { role:'assistant', content:`Bien reçu. Je prends en compte l'ensemble du parcours et suis prêt·e pour l'étape ${n}.` }
+  ]
+}
+
+function trigMsg(n) { return n===1 ? 'Bonjour, je souhaite commencer ma démarche ikigai.' : `Je suis prêt·e à commencer l'étape ${n}.` }
+
+async function aiIntro(n) {
+  setLoad(true); showTyping()
+  try {
+    const txt = await callAI([...buildCtx(n), { role:'user', content: trigMsg(n) }], buildSys(n))
+    hideTyping(); S.msgs[n].push({ role:'assistant', content:txt }); save(); addMsg('assistant', txt)
+  } catch(e) { hideTyping(); showErr(e) }
+  finally    { setLoad(false) }
+}
+
+// ──────────────────────────────────────────────────────────────────
+// ENVOI UTILISATEUR
+// ──────────────────────────────────────────────────────────────────
+async function sendMsg() {
+  const ta   = document.getElementById('chatInput')
+  const text = ta.value.trim()
+  if (!text || S.loading) return
+  ta.value = ''; ta.style.height = 'auto'
+  const n = S.step
+  S.msgs[n].push({ role:'user', content:text }); save(); addMsg('user', text)
+  setLoad(true); showTyping()
+  try {
+    const api = [...buildCtx(n), { role:'user', content:trigMsg(n) }, ...S.msgs[n]]
+    const txt = await callAI(api, buildSys(n))
+    hideTyping(); S.msgs[n].push({ role:'assistant', content:txt }); save(); addMsg('assistant', txt)
+  } catch(e) {
+    hideTyping(); S.msgs[n].pop(); save(); showErr(e)
+  } finally { setLoad(false) }
+}
+
+// ──────────────────────────────────────────────────────────────────
+// ÉTAPE SUIVANTE
+// ──────────────────────────────────────────────────────────────────
+async function nextStep() {
+  const n = S.step
+  if ((S.msgs[n]||[]).length < 3) {
+    modal('Échange insuffisant', 'Continuez à échanger avec le coach pour explorer cette étape en profondeur avant de passer à la suivante.', null)
+    return
+  }
+  const isLast = n === 5
+  modal(
+    isLast ? 'Finaliser le parcours' : `Passer à l'étape ${n+1}`,
+    isLast ? 'Le coach va faire la synthèse finale de votre parcours.' : `Le coach va d'abord synthétiser l'étape ${n}, puis l'étape ${n+1} démarrera automatiquement.`,
+    async () => {
+      closeModal()
+      const req = isLast
+        ? 'Pouvez-vous faire la synthèse finale de notre parcours ikigai et me délivrer votre message d\'encouragement ?'
+        : `Avant de passer à l'étape suivante, pouvez-vous faire la synthèse de ce que nous avons exploré dans cette étape ?`
+      S.msgs[n].push({ role:'user', content:req }); save(); addMsg('user', req)
+      setLoad(true); showTyping()
+      try {
+        const api = [...buildCtx(n), { role:'user', content:trigMsg(n) }, ...S.msgs[n]]
+        const txt = await callAI(api, buildSys(n))
+        hideTyping(); S.msgs[n].push({ role:'assistant', content:txt })
+        if (!S.done.includes(n)) S.done.push(n); save(); addMsg('assistant', txt); renderSidebar()
+        if (!isLast) setTimeout(() => goToStep(n+1), 1800)
+      } catch(e) { hideTyping(); S.msgs[n].pop(); save(); showErr(e) }
+      finally    { setLoad(false) }
+    }
+  )
+}
+
+// ──────────────────────────────────────────────────────────────────
+// RECOMMENCER UNE ÉTAPE
+// ──────────────────────────────────────────────────────────────────
+function restartStep() {
+  modal('Recommencer cette étape', 'Voulez-vous effacer la conversation de cette étape et recommencer depuis le début ?', () => {
+    closeModal()
+    const n = S.step; S.msgs[n] = []
+    const i = S.done.indexOf(n); if (i>-1) S.done.splice(i,1)
+    save(); document.getElementById('msgsBox').innerHTML = ''; renderSidebar(); aiIntro(n)
+  })
+}
+
+// ──────────────────────────────────────────────────────────────────
+// EXPORT PDF
+// ──────────────────────────────────────────────────────────────────
+function exportParcours() {
+  const date = new Date().toLocaleDateString('fr-FR',{year:'numeric',month:'long',day:'numeric'})
+  const nom  = S.prenom || 'Participant·e'
+  let body   = '', ok = false
+
+  STEPS.forEach(s => {
+    const m = S.msgs[s.id]; if (!m||!m.length) return; ok = true
+    body += `<section style="margin-bottom:2.5rem;page-break-inside:avoid">
+      <h2 style="font-family:'Playfair Display',serif;color:#0F2540;font-size:1.25rem;
+          border-bottom:3px solid #FFD100;padding-bottom:.5rem;margin-bottom:1.1rem">
+        Étape ${s.id} — ${s.title}</h2>`
+    m.forEach(x => {
+      const ai = x.role === 'assistant'
+      body += `<div style="margin-bottom:.85rem;padding:.75rem 1rem;border-radius:8px;
+          ${ai?'background:#F5F5F0;border-left:4px solid #2A4D6D':'background:#FEF3C7;border-left:4px solid #FFD100'}">
+        <div style="font-size:.7rem;font-weight:700;color:${ai?'#2A4D6D':'#0F2540'};
+            text-transform:uppercase;letter-spacing:.5px;margin-bottom:.35rem">
+          ${ai?'✦ Coach PsyCyaNe':`👤 ${nom}`}</div>
+        <div style="font-size:.87rem;line-height:1.65;color:#3A3A3A;white-space:pre-wrap">${
+          x.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        }</div></div>`
+    })
+    body += '</section>'
+  })
+
+  if (!ok) body = `<p style="color:#3E5C7E;text-align:center;padding:3rem">Commencez votre parcours pour voir vos échanges ici.</p>`
+
+  const w = window.open('','_blank')
+  w.document.write(`<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8"><title>Mon Ikigai · PsyCyaNe · ${nom}</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{font-family:'DM Sans',sans-serif;max-width:760px;margin:0 auto;padding:2rem 1.5rem;color:#3A3A3A}
+h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:#0F2540;margin-bottom:.2rem}
+.meta{color:#3E5C7E;font-size:.83rem;margin-bottom:1.4rem}
+hr{border:none;border-top:2px solid #0F2540;margin:1.25rem 0}
+.btn{position:fixed;top:1rem;right:1rem;padding:.65rem 1.3rem;background:#0F2540;color:#FFD100;
+  border:none;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif}
+@media print{.btn{display:none}body{padding:0}}
+</style></head><body>
+<button class="btn" onclick="window.print()">🖨 Imprimer / PDF</button>
+<h1>Mon Parcours Ikigai · PsyCyaNe</h1>
+<div class="meta">${nom} &nbsp;·&nbsp; ${date}</div><hr>
+${body}</body></html>`)
+  w.document.close()
+}
+
+// ──────────────────────────────────────────────────────────────────
+// HELPERS
+// ──────────────────────────────────────────────────────────────────
+function setLoad(v) {
+  S.loading = v
+  document.getElementById('btnSend').disabled  = v
+  document.getElementById('chatInput').disabled = v
+}
+function onKey(e) { if(e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMsg() } }
+function grow(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,108)+'px' }
+
+function showErr(e) {
+  let m = e.message || 'Erreur inconnue'
+  if (m.includes('401') || m.includes('authentication')) m='⚠️ Erreur d\'authentification — vérifiez votre Worker et la clé API.'
+  else if (m.includes('429')) m='⚠️ Trop de requêtes. Attendez quelques instants.'
+  else if (m.includes('Failed to fetch') || m.includes('NetworkError'))
+    m='⚠️ Connexion impossible au Worker. Vérifiez que PROXY_URL est bien renseignée dans index.html et que le Worker est bien déployé.'
+  else m = `⚠️ ${m}`
+  addMsg('assistant', m)
+}
+
+function modal(title, text, onOk) {
+  document.getElementById('mTitle').textContent = title
+  document.getElementById('mText').textContent  = text
+  document.getElementById('modalBg').classList.add('open')
+  const btn = document.getElementById('mOk')
+  btn.style.display = onOk ? '' : 'none'
+  if (onOk) btn.onclick = onOk
+}
+function closeModal() { document.getElementById('modalBg').classList.remove('open') }
+</script>
+</body>
+</html>
