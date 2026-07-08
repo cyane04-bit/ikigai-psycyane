@@ -438,15 +438,6 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
       <input type="text" id="prenomInput" placeholder="Ex : Marie, Thomas…">
     </div>
 
-    <div class="form-group">
-      <label for="modelSelect">Modèle IA</label>
-      <select id="modelSelect">
-        <option value="claude-sonnet-4-6">Claude Sonnet — Recommandé (rapide &amp; approfondi)</option>
-        <option value="claude-opus-4-8">Claude Opus — Très approfondi (plus lent)</option>
-        <option value="claude-haiku-4-5-20251001">Claude Haiku — Rapide et économique</option>
-      </select>
-    </div>
-
     <button class="btn-primary" onclick="startApp()">Commencer mon parcours →</button>
 
     <div class="setup-footer">
@@ -699,7 +690,7 @@ RÈGLES ABSOLUES :
 // ──────────────────────────────────────────────────────────────────
 // ÉTAT
 // ──────────────────────────────────────────────────────────────────
-const S = { model:'claude-sonnet-4-6', prenom:'', step:0, done:[], msgs:{}, loading:false }
+const S = { model:'claude-haiku-4-5-20251001', prenom:'', step:0, done:[], msgs:{}, loading:false }
 
 function save() {
   localStorage.setItem('psy_iki', JSON.stringify({ model:S.model, prenom:S.prenom, step:S.step, done:S.done, msgs:S.msgs }))
@@ -715,7 +706,6 @@ function restore() {
 window.addEventListener('DOMContentLoaded', restore)
 
 function startApp() {
-  S.model  = document.getElementById('modelSelect').value
   S.prenom = document.getElementById('prenomInput').value.trim()
   save()
   document.getElementById('setupScreen').style.display = 'none'
@@ -729,7 +719,6 @@ function gotoSettings() {
   document.getElementById('mainApp').style.display = 'none'
   document.getElementById('mainApp').classList.remove('visible')
   document.getElementById('setupScreen').style.display = 'flex'
-  document.getElementById('modelSelect').value = S.model
   document.getElementById('prenomInput').value = S.prenom
 }
 
